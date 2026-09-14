@@ -11,7 +11,7 @@ import java.util.List;
 public class FoodController {
     private final FoodService service;
     public FoodController(FoodService service) { this.service = service; }
-    @GetMapping("/recommend") public List<FoodRecipeView> recommend(@RequestParam Integer monthAge, @RequestParam(required = false) String allergen, @RequestParam(required = false) Long babyId) { return service.recommend(monthAge, allergen, babyId); }
+    @GetMapping("/recommend") public List<FoodRecipeView> recommend(@RequestParam("monthAge") Integer monthAge, @RequestParam(value = "allergen", required = false) String allergen, @RequestParam(value = "babyId", required = false) Long babyId) { return service.recommend(monthAge, allergen, babyId); }
     @PutMapping("/feedback") public FoodFeedback saveFeedback(@RequestBody FoodFeedback feedback) { return service.saveFeedback(feedback); }
-    @DeleteMapping("/feedback") public void removeFeedback(@RequestParam Long babyId, @RequestParam Long recipeId) { service.removeFeedback(babyId, recipeId); }
+    @DeleteMapping("/feedback") public void removeFeedback(@RequestParam("babyId") Long babyId, @RequestParam("recipeId") Long recipeId) { service.removeFeedback(babyId, recipeId); }
 }

@@ -25,7 +25,7 @@ public class FoodService {
     }
     public List<FoodRecipeView> recommend(Integer monthAge, String allergen, Long babyId) {
         QueryWrapper<FoodRecipe> query = new QueryWrapper<FoodRecipe>().le("month_age_min", monthAge).ge("month_age_max", monthAge);
-        if (allergen != null && !allergen.isBlank()) query.notLike("allergens", allergen);
+        if (allergen != null && !allergen.isBlank()) query.and(w -> w.isNull("allergens").or().notLike("allergens", allergen));
         List<FoodRecipe> recipes = mapper.selectList(query);
         Map<Long, String> feedbackByRecipe = babyId == null ? Collections.emptyMap() : feedbackMap(babyId);
         return recipes.stream().map(recipe -> FoodRecipeView.of(recipe, feedbackByRecipe.get(recipe.getId()))).collect(Collectors.toList());

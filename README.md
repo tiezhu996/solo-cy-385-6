@@ -81,6 +81,7 @@ npm run dev
 - 前端端口：`18405:80`
 - 后端端口：`19405:8080`
 - MySQL 数据使用命名卷 `babytracker-db-data`。
+- 后端启动时自动检查并创建数据表（`schema.sql`），旧数据卷升级无需手动执行 SQL。
 - Nginx 将 `/api` 代理到 `backend:8080`。
 
 ## License
