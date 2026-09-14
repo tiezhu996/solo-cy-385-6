@@ -34,3 +34,11 @@ CREATE TABLE IF NOT EXISTS food_recipe (
   nutrition TEXT,
   allergens VARCHAR(160)
 );
+
+CREATE TABLE IF NOT EXISTS food_feedback (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  baby_id BIGINT NOT NULL,
+  recipe_id BIGINT NOT NULL,
+  feedback VARCHAR(16) NOT NULL,
+  UNIQUE KEY uk_food_feedback_baby_recipe (baby_id, recipe_id)
+);

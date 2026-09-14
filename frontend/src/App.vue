@@ -11,16 +11,16 @@
     </section>
     <section class="card">
       <h2>辅食推荐</h2>
-      <van-cell v-for="food in foods" :key="food" :title="food" value="适合 9-12 个月" />
+      <FoodRecommend />
     </section>
   </main>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import * as echarts from 'echarts';
+import FoodRecommend from './components/FoodRecommend.vue';
 const growthChart = ref<HTMLElement>();
 const vaccines = [{ name: '麻腮风疫苗', date: '2026-06-18', done: false }, { name: '乙肝疫苗', date: '2026-04-10', done: true }];
-const foods = ['南瓜米糊', '鳕鱼土豆泥', '苹果燕麦粥'];
 onMounted(() => {
   const chart = echarts.init(growthChart.value!);
   chart.setOption({ legend: {}, xAxis: { data: ['6月','7月','8月','9月','10月'] }, yAxis: {}, series: [{ name: '体重kg', type: 'line', data: [7.5,7.9,8.2,8.6,9.1] }, { name: '身高cm', type: 'line', data: [66,68,70,72,74] }] });
