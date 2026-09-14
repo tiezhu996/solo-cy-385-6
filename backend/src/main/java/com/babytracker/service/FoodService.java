@@ -7,6 +7,7 @@ import com.babytracker.dto.FoodRecipeView;
 import com.babytracker.entity.FoodFeedback;
 import com.babytracker.entity.FoodRecipe;
 import com.babytracker.exception.BizException;
+import com.babytracker.mapper.BabyMapper;
 import com.babytracker.mapper.FoodFeedbackMapper;
 import com.babytracker.mapper.FoodMapper;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,11 @@ import java.util.stream.Collectors;
 public class FoodService {
     private final FoodMapper mapper;
     private final FoodFeedbackMapper feedbackMapper;
-    public FoodService(FoodMapper mapper, FoodFeedbackMapper feedbackMapper) {
+    private final BabyMapper babyMapper;
+    public FoodService(FoodMapper mapper, FoodFeedbackMapper feedbackMapper, BabyMapper babyMapper) {
         this.mapper = mapper;
         this.feedbackMapper = feedbackMapper;
+        this.babyMapper = babyMapper;
     }
     public List<FoodRecipeView> recommend(Integer monthAge, String allergen, Long babyId) {
         QueryWrapper<FoodRecipe> query = new QueryWrapper<FoodRecipe>().le("month_age_min", monthAge).ge("month_age_max", monthAge);
@@ -35,6 +38,8 @@ public class FoodService {
                 || feedback.getFeedback() == null || !FeedbackTypes.ALL.contains(feedback.getFeedback())) {
             throw new BizException(ErrorCode.VALIDATION_FAILED, "反馈参数不正确");
         }
+        if (babyMapper.selectById(feedback.getBabyId()) == null) throw new BizException(ErrorCode.NOT_FOUND, "宝宝不存在");
+        if (mapper.selectById(feedback.getRecipeId()) == null) throw new BizException(ErrorCode.NOT_FOUND, "食谱不存在");
         FoodFeedback existing = feedbackMapper.selectOne(byBabyAndRecipe(feedback.getBabyId(), feedback.getRecipeId()));
         if (existing == null) {
             feedback.setId(null);

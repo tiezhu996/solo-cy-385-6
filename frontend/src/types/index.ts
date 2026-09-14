@@ -1,5 +1,6 @@
 export interface Baby {
-  id: number;
+  /** 后端雪花 ID 以字符串返回，避免 JS Number 精度丢失 */
+  id: string;
   name: string;
   birthday: string;
   bloodType?: string;
@@ -10,7 +11,7 @@ export interface Baby {
 export type FeedbackType = 'like' | 'neutral' | 'dislike';
 
 export interface FoodRecipe {
-  id: number;
+  id: string;
   monthAgeMin: number;
   monthAgeMax: number;
   name: string;

@@ -38,7 +38,7 @@ import type { Baby, FeedbackType, FoodRecipe } from '../types';
 import FoodItem from './FoodItem.vue';
 
 const babies = ref<Baby[]>([]);
-const currentBabyId = ref<number | null>(null);
+const currentBabyId = ref<string | null>(null);
 const monthAge = ref(10);
 const allergen = ref('');
 const foods = ref<FoodRecipe[]>([]);
