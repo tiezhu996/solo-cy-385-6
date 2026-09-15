@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:babytracker_test;MODE=MySQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ''
+  sql:
+    init:
+      mode: always
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+jwt:
+  secret: test_secret

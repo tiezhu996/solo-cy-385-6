@@ -29,6 +29,13 @@ cd backend
 mvn spring-boot:run
 ```
 
+运行自动化测试（使用内嵌 H2 内存库，无需外部数据库）：
+
+```bash
+cd backend
+mvn test
+```
+
 ```bash
 cd frontend
 npm install
