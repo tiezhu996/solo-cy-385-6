@@ -10,6 +10,7 @@ import com.babytracker.exception.BizException;
 import com.babytracker.mapper.BabyMapper;
 import com.babytracker.mapper.FoodFeedbackMapper;
 import com.babytracker.mapper.FoodMapper;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
@@ -43,8 +44,15 @@ public class FoodService {
         FoodFeedback existing = feedbackMapper.selectOne(byBabyAndRecipe(feedback.getBabyId(), feedback.getRecipeId()));
         if (existing == null) {
             feedback.setId(null);
-            feedbackMapper.insert(feedback);
-            return feedback;
+            try {
+                feedbackMapper.insert(feedback);
+                return feedback;
+            } catch (DuplicateKeyException e) {
+                // 并发请求已抢先插入同一 (baby_id, recipe_id)，唯一键兜底后转为更新该行；
+                // 不开启事务：自动提交模式下此处能读到对方已提交的行
+                existing = feedbackMapper.selectOne(byBabyAndRecipe(feedback.getBabyId(), feedback.getRecipeId()));
+                if (existing == null) throw e;
+            }
         }
         existing.setFeedback(feedback.getFeedback());
         feedbackMapper.updateById(existing);
